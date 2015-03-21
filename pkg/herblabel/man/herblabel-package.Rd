@@ -33,8 +33,8 @@ Maintainer: Jinlong Zhang <jinlongzhang01@gmail.com>
 #    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.xls", package = "herblabel")
 #    herblabel_tex(infile = path,  outfile = "HERBARIUM_RECORDS_TEMPLATE.xls.tex")
 #    herblabel_rtf(infile = path,  outfile = "HERBARIUM_RECORDS_TEMPLATE.xls.rtf")
-    Sys.setlocale("LC_TIME", "English")
-    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", package = "herblabel")
-    herblabel_tex(infile = path,  outfile = "HERBARIUM_RECORDS_TEMPLATE.csv.tex")
-    herblabel_rtf(infile = path,  outfile = "HERBARIUM_RECORDS_TEMPLATE.csv.rtf")
+#    Sys.setlocale("LC_TIME", "English")
+#    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", package = "herblabel")
+#    herblabel_tex(infile = path,  outfile = "HERBARIUM_RECORDS_TEMPLATE.csv.tex")
+#    herblabel_rtf(infile = path,  outfile = "HERBARIUM_RECORDS_TEMPLATE.csv.rtf")
 }

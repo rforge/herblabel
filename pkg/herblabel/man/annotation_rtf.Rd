@@ -30,6 +30,6 @@ Jinlong Zhang
 
 \examples{
 # Do not run until you have package RODBC loaded.  
-#    path <- system.file("extdata", "ANNOTATION_TEMPLATE.xls", package = "herblabel")
-#    annotation_rtf(infile = path,  outfile = "annotations.rtf")
+#   path <- system.file("extdata", "ANNOTATION_TEMPLATE.xls", package = "herblabel")
+#   annotation_rtf(infile = path,  outfile = "annotations.rtf")
 }
