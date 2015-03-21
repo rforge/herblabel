@@ -33,6 +33,7 @@ Jinlong Zhang
 \code{\link{annotation_rtf}}
 }
 \examples{
-path <- system.file("extdata", "ANNOTATION_TEMPLATE.xls", package = "herblabel")
-annotation_tex(infile = path)
+# Do not run until you have package RODBC loaded.  
+#path <- system.file("extdata", "ANNOTATION_TEMPLATE.xls", package = "herblabel")
+#annotation_tex(infile = path)
 }

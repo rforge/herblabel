@@ -32,8 +32,9 @@ Jinlong Zhang
 }
 
 \examples{
-    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.xls", package = "herblabel")
-    wetlabel_rtf(infile = path)
+# Do not run until you have package RODBC loaded.  
+#    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.xls", package = "herblabel")
+#    wetlabel_rtf(infile = path)
     
     path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", package = "herblabel")
     wetlabel_rtf(infile = path)

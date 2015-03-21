@@ -28,8 +28,9 @@ If the spell check is TRUE, both the genera and families will be compared with t
 This function will create a Latex file containing the herbarium labels. The latex file could be compiled to PDF via pdfLatex in Miktex, TexLive etc. The text will be highlighted if the genus does not match the family. Comments will be automatically generated. If you do not want to change the information, just change "spellcheck = FALSE". 
 }
 \references{
-The Plabel program developed by Kent D. Perkins at the  University of Florida Herbarium.
- http://www.flmnh.ufl.edu/natsci/herbarium/pl/
+The Plabel program developed by Kent D. Perkins at the University of Florida Herbarium.
+
+http://www.flmnh.ufl.edu/natsci/herbarium/pl/
 }
 \author{
 Jinlong Zhang
@@ -40,8 +41,9 @@ Jinlong Zhang
 }
 \examples{
 
-path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.xls", package = "herblabel")
-herblabel_tex(infile = path, outfile = "herblabel.HERBARIUM_RECORDS_TEMPLATE.xls.tex")
+# Do not run until you have package RODBC loaded.  
+# path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.xls", package = "herblabel")
+# herblabel_tex(infile = path, outfile = "herblabel.HERBARIUM_RECORDS_TEMPLATE.xls.tex")
 
 path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", package = "herblabel")
 herblabel_tex(infile = path, outfile = "herblabel.HERBARIUM_RECORDS_TEMPLATE.csv.tex")

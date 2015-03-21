@@ -1,15 +1,13 @@
 Package: herblabel
 Type: Package
 Title: Preparing herbarium labels
-Version: 0.2.9
+Version: 0.3.0
 Date: 2015-3-22
-Authors@R: person("Jinlong Zhang", "Developer", role = c("aut", "cre"),
+Authors@R: person("Jinlong", "Zhang", role = c("aut", "cre"),
 		     email = "jinlongzhang01@gmail.com")
 Author: Jinlong Zhang [aut, cre]
 Maintainer: Jinlong Zhang <jinlongzhang01@gmail.com>
 Description: Preparing herbarium labels based on the information from a spreadsheet template based on Darwin Core and the CVH3.0 protocol.
 License: GPL-2
 LazyLoad: yes
-Depends: RODBC
-OS_type: Windows_WIN32
 URL: https://r-forge.r-project.org/projects/herblabel/
