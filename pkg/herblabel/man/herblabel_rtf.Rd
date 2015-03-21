@@ -38,11 +38,11 @@ Jinlong Zhang
 # Do not run until you have package RODBC loaded.  
 #    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.xls", package = "herblabel")
 #    herblabel_rtf(infile = path,  outfile = "herblabel.xls.HERBARIUM_RECORDS_TEMPLATE.rtf")
-    Sys.setlocale("LC_TIME", "English")  
-    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", package = "herblabel")
-    herblabel_rtf(infile = path,  outfile = "herblabel.csv.HERBARIUM_RECORDS_TEMPLATE.rtf")
-    
-    path <- system.file("extdata", "res_converted.csv", package = "herblabel")
-    herblabel_rtf(infile = path,  outfile = "herblabel.csv_reconverted.rtf")
+#    Sys.setlocale("LC_TIME", "English")  
+#    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", package = "herblabel")
+#    herblabel_rtf(infile = path,  outfile = "herblabel.csv.HERBARIUM_RECORDS_TEMPLATE.rtf")
+#    
+#    path <- system.file("extdata", "res_converted.csv", package = "herblabel")
+#    herblabel_rtf(infile = path,  outfile = "herblabel.csv_reconverted.rtf")
     
 }

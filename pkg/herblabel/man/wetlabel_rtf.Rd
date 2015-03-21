@@ -35,8 +35,8 @@ Jinlong Zhang
 # Do not run until you have package RODBC loaded.  
 #    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.xls", package = "herblabel")
 #    wetlabel_rtf(infile = path)
-    Sys.setlocale("LC_TIME", "English")
-    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", package = "herblabel")
-    wetlabel_rtf(infile = path)
+#    Sys.setlocale("LC_TIME", "English")
+#    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", package = "herblabel")
+#    wetlabel_rtf(infile = path)
     
 }

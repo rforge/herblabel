@@ -59,7 +59,7 @@ Jinlong Zhang
 }
 
 \examples{
-    Sys.setlocale("LC_TIME", "English")
-    bbsp_csv_file <- system.file("extdata", "EXPORT20150121.CSV", package = "herblabel")
-    bbsp_csv2herblabel(infile = bbsp_csv_file,  outfile = "herblabel.csv")
+#    Sys.setlocale("LC_TIME", "English")
+#    bbsp_csv_file <- system.file("extdata", "EXPORT20150121.CSV", package = "herblabel")
+#    bbsp_csv2herblabel(infile = bbsp_csv_file,  outfile = "herblabel.csv")
 }

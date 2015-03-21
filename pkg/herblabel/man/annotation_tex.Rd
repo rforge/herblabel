@@ -34,6 +34,6 @@ Jinlong Zhang
 }
 \examples{
 # Do not run until you have package RODBC loaded.  
-#path <- system.file("extdata", "ANNOTATION_TEMPLATE.xls", package = "herblabel")
-#annotation_tex(infile = path)
+# path <- system.file("extdata", "ANNOTATION_TEMPLATE.xls", package = "herblabel")
+# annotation_tex(infile = path)
 }
