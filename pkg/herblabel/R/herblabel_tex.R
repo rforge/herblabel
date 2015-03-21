@@ -9,7 +9,6 @@ herblabel_tex <- function(infile = NULL, spellcheck = FALSE, outfile = "herblabe
         herbdat000 <- read.csv(infile, header = TRUE, stringsAsFactors = FALSE)
     }
 	
-    
     if(any(is.na(herbdat000$HERBARIUM))){
         stop(paste("\"HERBARIUM\" must be provided for row: ", 
              paste(which(is.na(herbdat000$HERBARIUM))+1, collapse = ", ")))
@@ -64,7 +63,6 @@ herblabel_tex <- function(infile = NULL, spellcheck = FALSE, outfile = "herblabe
         }
     
     #################### 
-    
     dirpgenus <- system.file("extdata", "plantlist_genera20141118.csv", package = "herblabel")
     pgenus <- read.csv(dirpgenus, header = TRUE)
     

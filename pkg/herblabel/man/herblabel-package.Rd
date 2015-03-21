@@ -14,7 +14,7 @@ modified in MS Word or compiled using pdfLatex.
 \tabular{ll}{
 Package: \tab herblabel\cr
 Type: \tab Package\cr
-Version: \tab 0.3.0\cr
+Version: \tab 0.3.1\cr
 Date: \tab 2015-03-22\cr
 License: \tab GLP-2\cr
 LazyLoad: \tab yes\cr
@@ -29,7 +29,7 @@ Maintainer: Jinlong Zhang <jinlongzhang01@gmail.com>
 
 \keyword{ package }
 \examples{
-# Do not run until you have package RODBC loaded.  
+#    Do not run until you have package RODBC loaded.  
 #    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.xls", package = "herblabel")
 #    herblabel_tex(infile = path,  outfile = "HERBARIUM_RECORDS_TEMPLATE.xls.tex")
 #    herblabel_rtf(infile = path,  outfile = "HERBARIUM_RECORDS_TEMPLATE.xls.rtf")
