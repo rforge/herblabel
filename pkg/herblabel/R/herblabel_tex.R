@@ -1,5 +1,5 @@
 herblabel_tex <- function(infile = NULL, spellcheck = FALSE, outfile = "herblabel.tex"){
-    Sys.setlocale("LC_TIME", "English")
+    #Sys.setlocale("LC_TIME", "English")
     if(grepl("xls",infile)){
 	    dat <- odbcConnectExcel(xls.file = infile)
         sqlTables(dat)$TABLE_NAME

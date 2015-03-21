@@ -3,7 +3,7 @@ wetlabel_rtf <- function(infile = NULL, outfile = "Wet_Labels.RTF", spellcheck =
     #### setwd("D:\\Dropbox\\help\\20141125 herblabel\\devlope\\herblabel\\inst\\extdata")
     #### library(RODBC)
     #### file = "herbarium_records.xls"
-    Sys.setlocale("LC_TIME", "English")
+    #Sys.setlocale("LC_TIME", "English")
     if(grepl("xls",infile)){
 	    dat <- odbcConnectExcel(xls.file = infile)
         sqlTables(dat)$TABLE_NAME
