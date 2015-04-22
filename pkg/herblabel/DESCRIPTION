@@ -1,8 +1,8 @@
 Package: herblabel
 Type: Package
-Title: Preparing herbarium labels
-Version: 0.3.1
-Date: 2015-3-22
+Title: Preparing herbarium labels in LaTeX and RTF
+Version: 0.3.2
+Date: 2015-4-21
 Authors@R: person("Jinlong", "Zhang", role = c("aut", "cre"),
 		     email = "jinlongzhang01@gmail.com")
 Author: Jinlong Zhang [aut, cre]
@@ -11,3 +11,9 @@ Description: Preparing herbarium labels based on the information from a spreadsh
 License: GPL-2
 LazyLoad: yes
 URL: https://r-forge.r-project.org/projects/herblabel/
+Repository: R-Forge
+Repository/R-Forge/Project: herblabel
+Repository/R-Forge/Revision: 8
+Repository/R-Forge/DateTimeStamp: 2015-03-21 07:39:44
+Date/Publication: 2015-03-21 07:39:44
+Packaged: 2015-03-21 07:45:15 UTC; rforge

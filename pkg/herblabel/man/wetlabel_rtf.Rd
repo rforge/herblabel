@@ -22,9 +22,10 @@ Logical, indicating whether the spell check will be performed.
 }
 }
 \details{
-This function read template in Excel 2003 only, and generate a RTF file containing 
-herbarium labels. Only a limited number of the columns within the Excel can be left blank. 
-This function was inspired by the PLable software developed at the University of Florida. 
+This function read template in Excel 2003 only, and generate a RTF file
+containing herbarium labels. Only a limited number of the columns within
+the Excel can be left blank. This function was inspired by the PLable 
+software developed at the University of Florida. 
 }
 
 \author{
@@ -32,11 +33,10 @@ Jinlong Zhang
 }
 
 \examples{
-# Do not run until you have package RODBC loaded.  
-#    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.xls", package = "herblabel")
-#    wetlabel_rtf(infile = path)
-#    Sys.setlocale("LC_TIME", "English")
-#    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", package = "herblabel")
-#    wetlabel_rtf(infile = path)
+
+    #Sys.setlocale("LC_TIME", "English")
+    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", 
+                        package = "herblabel")
+    wetlabel_rtf(infile = path)
     
 }

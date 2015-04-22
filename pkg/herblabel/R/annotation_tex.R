@@ -1,15 +1,6 @@
 annotation_tex <- function(infile = NULL, outfile = "annotation.tex"){
     #Sys.setlocale("LC_TIME", "English")
-    if(grepl("xls",infile)){
-	    dat <- odbcConnectExcel(xls.file = infile)
-        sqlTables(dat)$TABLE_NAME
-        herbdat000 = sqlFetch(dat , "Sheet1") # read a sheet
-        close(dat)
-    } else {
-        herbdat000 <- read.csv(infile, header = TRUE)
-    }
-	
- 
+    herbdat000 <- read.csv(infile, header = TRUE)
     ### match.gf(herbdat000$FAMIL, herbdat000$GENUS)
 
     temp1 <- c("\\documentclass[a4paper,5pt,twocolumn]{article}",

@@ -1,14 +1,6 @@
 annotation_rtf <- function(infile = NULL,  outfile = "annotations.rtf"){
-    
     #Sys.setlocale("LC_TIME", "English")
-    if(grepl("xls",infile)){
-	    dat <- odbcConnectExcel(xls.file = infile)
-        sqlTables(dat)$TABLE_NAME
-        herbdat000 = sqlFetch(dat , "Sheet1") # read a sheet
-        close(dat)
-    } else {
-        herbdat000 <- read.csv(infile, header = TRUE)
-    }
+    herbdat000 <- read.csv(infile, header = TRUE)
 	
     if(any(is.na(herbdat000$GENUS))){
         stop(paste("\"GENUS\" must be provided for row: ", 

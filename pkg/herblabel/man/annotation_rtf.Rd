@@ -12,7 +12,7 @@ annotation_rtf(infile = NULL, outfile = "annotations.rtf")
 
 \arguments{
   \item{infile}{
-Character representing the template file in Excel2003.
+Character strings for the name of the csv file.
 }
 
   \item{outfile}{
@@ -20,7 +20,7 @@ the output rtf file.
 }
 }
 \details{
-This function reads Excel 2003 file template, and generate an RTF file containing 
+This function reads csv template, and generate an RTF file containing 
 annotation labels. 
 }
 
@@ -29,7 +29,7 @@ Jinlong Zhang
 }
 
 \examples{
-# Do not run until you have package RODBC loaded.  
-#   path <- system.file("extdata", "ANNOTATION_TEMPLATE.xls", package = "herblabel")
-#   annotation_rtf(infile = path,  outfile = "annotations.rtf")
+   path <- system.file("extdata", "ANNOTATION_TEMPLATE.csv", 
+                       package = "herblabel")
+   annotation_rtf(infile = path,  outfile = "annotations.rtf")
 }

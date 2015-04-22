@@ -19,7 +19,10 @@ The file name for the latex source code.
 }
 }
 \details{
-This function generates herbarium annotation labels based on the template of annotations. This function will create a Latex file containing the annotation labels. The latex file could be compiled to PDF via pdfLatex in MikTeX, TexLive etc.
+This function generates herbarium annotation labels based on the template of 
+annotations. This function will create a Latex file containing the annotation 
+labels. The latex file could be compiled to PDF via pdfLatex in MikTeX, 
+TexLive etc.
 }
 \value{
 Annotation labels
@@ -33,7 +36,7 @@ Jinlong Zhang
 \code{\link{annotation_rtf}}
 }
 \examples{
-# Do not run until you have package RODBC loaded.  
-# path <- system.file("extdata", "ANNOTATION_TEMPLATE.xls", package = "herblabel")
-# annotation_tex(infile = path)
+path <- system.file("extdata", "ANNOTATION_TEMPLATE.csv", 
+                    package = "herblabel")
+annotation_tex(infile = path)
 }

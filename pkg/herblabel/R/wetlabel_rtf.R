@@ -1,18 +1,5 @@
 wetlabel_rtf <- function(infile = NULL, outfile = "Wet_Labels.RTF", spellcheck = FALSE){
-    #### setwd("C:\\Users\\jlzhang.KFBG\\Dropbox\\help\\20141125 herblabel\\devlope\\herblabel\\inst\\extdata")
-    #### setwd("D:\\Dropbox\\help\\20141125 herblabel\\devlope\\herblabel\\inst\\extdata")
-    #### library(RODBC)
-    #### file = "herbarium_records.xls"
-    #Sys.setlocale("LC_TIME", "English")
-    if(grepl("xls",infile)){
-	    dat <- odbcConnectExcel(xls.file = infile)
-        sqlTables(dat)$TABLE_NAME
-        herbdat000 = sqlFetch(dat , "Sheet1") # read a sheet
-        close(dat)
-    } else {
-        herbdat000 <- read.csv(infile, header = TRUE, stringsAsFactors = FALSE)
-    }
-	
+    herbdat000 <- read.csv(infile, header = TRUE, stringsAsFactors = FALSE)
 	
     if(any(is.na(herbdat000$HERBARIUM))){
         stop(paste("\"HERBARIUM\" must be provided for row: ", 
@@ -152,7 +139,6 @@ wetlabel_rtf <- function(infile = NULL, outfile = "Wet_Labels.RTF", spellcheck =
         #### ifelse(is.na(herbdat$TITLE), "", paste("{\\pard\\keep\\keepn\\fi0\\li0\\fs20\\sb60 \\b ",
         ####          herbdat$TITLE,"\\b0 \\par }", sep = "")),
         #### SPECIES INFO
-        
         #### FAMILY, in BOLD FACE, must be either in Flora of Hong Kong, or The Plant List
         paste("{\\pard\\keep\\keepn\\fi0\\li0\\b\\qc\\sa60\\fs14 ",
                toupper(herbdat$FAMILY),"\\b0\\par }", sep = ""), 
@@ -185,7 +171,6 @@ wetlabel_rtf <- function(infile = NULL, outfile = "Wet_Labels.RTF", spellcheck =
                    toupper(format(as.Date(herbdat$DATE_COLLECTED), format="%d %b %Y")),
                    "\\qj0\\par}",sep = "")
             ), 
-              
         ##### COUNTY and LOCALITY
         paste("{\\pard\\keep\\keepn\\fi0\\li0 ", toupper(herbdat$COUNTRY),", ",
                 herbdat$STATE_PROVINCE, ", ", herbdat$COUNTY, ": ",

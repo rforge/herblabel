@@ -1,13 +1,6 @@
 herblabel_tex <- function(infile = NULL, spellcheck = FALSE, outfile = "herblabel.tex"){
-    #Sys.setlocale("LC_TIME", "English")
-    if(grepl("xls",infile)){
-	    dat <- odbcConnectExcel(xls.file = infile)
-        sqlTables(dat)$TABLE_NAME
-        herbdat000 = sqlFetch(dat , "Sheet1") # read a sheet
-        close(dat)
-    } else {
+    Sys.setlocale("LC_TIME", "English")
         herbdat000 <- read.csv(infile, header = TRUE, stringsAsFactors = FALSE)
-    }
 	
     if(any(is.na(herbdat000$HERBARIUM))){
         stop(paste("\"HERBARIUM\" must be provided for row: ", 

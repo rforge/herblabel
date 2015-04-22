@@ -22,11 +22,13 @@ the output rtf file.
 }
 }
 \details{
-This function read Excel 2003 file template, and generate a RTF file containing 
-herbarium labels. Only a limited number of the columns within the Excel can be left blank. 
-This function was inspired by the PLable software developed at the University of Florida Herbarium. 
+This function read csv template, and generate a RTF file containing 
+herbarium labels. Only a limited number of the columns can be left blank. 
+This function was inspired by the PLable software developed at the University
+ of Florida Herbarium. 
 
-See The Plabel program developed by Kent D. Perkins at the University of Florida Herbarium.
+See The Plabel program developed by Kent D. Perkins at the University of 
+Florida Herbarium.
 http://www.flmnh.ufl.edu/natsci/herbarium/pl/
 }
 
@@ -35,14 +37,15 @@ Jinlong Zhang
 }
 
 \examples{
-# Do not run until you have package RODBC loaded.  
-#    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.xls", package = "herblabel")
-#    herblabel_rtf(infile = path,  outfile = "herblabel.xls.HERBARIUM_RECORDS_TEMPLATE.rtf")
-#    Sys.setlocale("LC_TIME", "English")  
-#    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", package = "herblabel")
-#    herblabel_rtf(infile = path,  outfile = "herblabel.csv.HERBARIUM_RECORDS_TEMPLATE.rtf")
-#    
-#    path <- system.file("extdata", "res_converted.csv", package = "herblabel")
-#    herblabel_rtf(infile = path,  outfile = "herblabel.csv_reconverted.rtf")
+    #Sys.setlocale("LC_TIME", "English")  
+    path <- system.file("extdata", "HERBARIUM_RECORDS_TEMPLATE.csv", 
+                        package = "herblabel")
+    herblabel_rtf(infile = path,  
+                  outfile = "herblabel.csv.HERBARIUM_RECORDS_TEMPLATE.rtf")
+    
+    path <- system.file("extdata", "res_converted.csv", 
+                        package = "herblabel")
+    herblabel_rtf(infile = path,  
+                  outfile = "herblabel.csv_reconverted.rtf")
     
 }
