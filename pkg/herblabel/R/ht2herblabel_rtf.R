@@ -43,10 +43,6 @@ ht2herblabel_rtf <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
         warning(paste("\"LOCALITY\" not provided  for row: ", 
              paste(which(is.na(herbdat000$LOCALITY)) + 1, collapse = ", ")))
         }
-    if(any(is.na(herbdat000$REMARKS))){
-        warning(paste("\"REMARKS\" not provided for row: ", 
-             paste(which(is.na(herbdat000$REMARKS)) + 1, collapse = ", ")))
-        }
     if(any(is.na(herbdat000$IDENTIFIED_BY))){
         stop(paste("\"IDENTIFIED_BY\" must be provided for row: ", 
              paste(which(is.na(herbdat000$DETERMINOR)) + 1, collapse = ", ")))
@@ -55,10 +51,10 @@ ht2herblabel_rtf <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
         warning(paste("\"DATE_IDENTIFIED\" not provided for row: ", 
              paste(which(is.na(herbdat000$DATE_IDENTIFIED)) + 1, collapse = ", ")))
         }
-    
+    formatdate <- function(x){format(as.Date(x),"%d %B %Y")}
     #################### 
     
-    dirpgenus <- system.file("extdata", "plantlist_genera20141118.csv", 
+    dirpgenus <- system.file("extdata", "APGIII_GENERA.csv", 
                               package = "herblabel")
     pgenus <- read.csv(dirpgenus, header = TRUE)
     
@@ -123,7 +119,7 @@ ht2herblabel_rtf <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
                                              !as.character(Cap(fgmerge.temp$FAMILY.y)) %in% 
                                               as.character(Cap(fgmerge.temp$FAMILY.x))], 
                                        collapse = "\", \"") ,
-                                       "\" according to the plantlist genera database.)\\highlight0 ", sep = "")
+                                       "\" according to the Plantlist Database.)\\highlight0 ", sep = "")
                         
                 } else{
                 herbdat$FAMILY <- paste("\\highlight3 ", unique(as.character(fgmerge.temp$FAMILY.x)), 
@@ -132,8 +128,7 @@ ht2herblabel_rtf <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
                                        "\\i0 \\highlight9  (should be in \"", 
                                        paste(as.character(fgmerge.temp$FAMILY.y), 
                                        collapse = "\", \"") ,
-                                       "\" according to the plantlist 
-                                       genera database.)\\highlight0 ", sep = "")
+                                       "\" according to the Plantlist Database.)\\highlight0 ", sep = "")
                  }
             }
         }
@@ -187,23 +182,29 @@ ht2herblabel_rtf <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
                herbdat$ELEVATION,"m\\par }",sep = "")),
 
         ##### Attributes and Remarks
-        paste("{\\pard\\keep\\keepn\\fi0\\li0\\sb60", 
-        ifelse(is.na(herbdat$ATTRIBUTES), " ", as.character(herbdat$ATTRIBUTES)),
-               " ", ifelse(is.na(herbdat$REMARKS), " ", as.character(herbdat$REMARKS)), 
-               "\\sa80\\par}", sep = ""), 
+        ifelse(is.na(herbdat$ATTRIBUTES) & is.na(herbdat$REMARKS)|herbdat$ATTRIBUTES == "" & herbdat$REMARKS == "", "",    
+                paste("{\\pard\\keep\\keepn\\fi0\\li0\\sb60", 
+                    ifelse(is.na(herbdat$ATTRIBUTES)|herbdat$ATTRIBUTES == "", "", as.character(herbdat$ATTRIBUTES)),
+                    ifelse(is.na(herbdat$ATTRIBUTES)|herbdat$ATTRIBUTES == "", "", " "), 
+                    ifelse(is.na(herbdat$REMARKS)|herbdat$REMARKS == "", "", as.character(herbdat$REMARKS)), 
+                     "\\sa80\\par}", sep = "")), 
                 
         ##### COLLECTOR and COLLECTION NUMBER !
         ifelse(is.na(herbdat$ADDITIONAL_COLLECTOR), 
             paste("{\\pard\\keep\\keepn\\fi0\\li0\\sb50\\sa100\\tqr\\tx5045\\qj\\b ",
                    herbdat$COLLECTOR,", #" ,herbdat$COLLECTOR_NUMBER,"\\b0", 
                    "\\qj0","\\tab ",
-                   format(as.Date(herbdat$DATE_COLLECTED), 
-                   format="%d %B %Y"),"\\par}",sep = ""), 
+                   tryCatch(formatdate(herbdat$DATE_COLLECTED), 
+                   error= function(e) {print("Warning: Date format incorrect, using original string"); 
+                   herbdat$DATE_COLLECTED}),
+                   "\\par}",sep = ""), 
             paste("{\\pard\\keep\\keepn\\fi0\\li0\\sb50\\sa100\\tqr\\tx5045\\qj\\b ",
                    herbdat$COLLECTOR,", ",herbdat$ADDITIONAL_COLLECTOR,"\\qj0  #" ,
                    herbdat$COLLECTOR_NUMBER, "\\b0", "\\tab ",
-                   format(as.Date(herbdat$DATE_COLLECTED), 
-                   format="%d %B %Y"), "\\par}",sep = "")
+                   tryCatch(formatdate(herbdat$DATE_COLLECTED), 
+                   error= function(e) {print("Warning: Date format incorrect, using original string");
+                   herbdat$DATE_COLLECTED}),
+                   "\\par}",sep = "")
             ), 
         
         ##### Project
@@ -220,14 +221,16 @@ ht2herblabel_rtf <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
                   "", as.character(herbdat$GLOBAL_UNIQUE_IDENTIFIER))), 
                   "\\tx5045\\tab ", herbdat$TYPE_STATUS,
                  " \\tql Det.: ",herbdat$IDENTIFIED_BY,", ", 
-                 format(as.Date(herbdat$DATE_IDENTIFIED), 
-                 format="%d %B %Y"), "\\par}",sep = ""),
+                 tryCatch(formatdate(herbdat$DATE_IDENTIFIED), 
+                 error= function(e) {print("Warning: Date format incorrect, using original string"); 
+                 herbdat$DATE_IDENTIFIED}), "\\par}",sep = ""),
             paste("{\\pard\\keep\\sa40\\keepn\\fi0\\li0\\tqr ", gsub("_", 
                   "", ifelse(is.na(as.character(herbdat$GLOBAL_UNIQUE_IDENTIFIER)), 
                  "", as.character(herbdat$GLOBAL_UNIQUE_IDENTIFIER))),
                  "\\tx5045\\tab \\tql Det.: ", herbdat$IDENTIFIED_BY,", ", 
-                 format(as.Date(herbdat$DATE_IDENTIFIED), 
-                 format="%d %B %Y"), "\\par}",sep = "")
+                 tryCatch(formatdate(herbdat$DATE_IDENTIFIED), 
+                 error= function(e) {print("Warning: Date format incorrect, using original string"); 
+                 herbdat$DATE_IDENTIFIED}), "\\par}",sep = "")
             ),
         "{\\pard\\sa400 \\par }"
          )                            ### End of one label
@@ -235,6 +238,7 @@ ht2herblabel_rtf <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
     }
     template <- c(temp1, temp2, "}") ## End of the RTF file
     res <- template[!template %in% ""]
+    res <- res[!res %in% " "]
     writeLines(res, outfile)
     ### Notice
     cat("Herbarium Labels have been saved to:\n", 

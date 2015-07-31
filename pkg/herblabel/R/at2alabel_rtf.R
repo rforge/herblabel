@@ -3,23 +3,25 @@
 at2alabel_rtf <- function(infile = NULL, outfile = "annotations.rtf") {
     herbdat000 <- read.csv(infile, header = TRUE)
     if (any(is.na(herbdat000$GENUS))) {
-        stop(paste("\"GENUS\" must be provided for row: ", 
+        warning(paste("\"GENUS\" must be provided for row: ", 
         paste(which(is.na(herbdat000$GENUS)) + 
             1, collapse = ", ")))
     }
     if (any(is.na(herbdat000$IDENTIFIED_BY))) {
-        stop(paste("\"IDENTIFIED_BY\" must be provided for row: ", 
+        warning(paste("\"IDENTIFIED_BY\" must be provided for row: ", 
         paste(which(is.na(herbdat000$DETERMINOR)) + 
             1, collapse = ", ")))
     }
     if (any(is.na(herbdat000$DATE_IDENTIFIED))) {
-        stop(paste("\"DATE_IDENTIFIED\" must be provided for row: ", 
+        warning(paste("\"DATE_IDENTIFIED\" must be provided for row: ", 
         paste(which(is.na(herbdat000$DATE_IDENTIFIED)) + 
             1, collapse = ", ")))
     }
-    
+    formatdate <- function(x){
+        format(as.Date(x),"%d %B %Y")
+    }
     #################### 
-    dirpgenus <- system.file("extdata", "plantlist_genera20141118.csv", 
+    dirpgenus <- system.file("extdata", "APGIII_GENERA.csv", 
                             package = "herblabel")
     pgenus <- read.csv(dirpgenus, header = TRUE)
     
@@ -67,9 +69,11 @@ at2alabel_rtf <- function(infile = NULL, outfile = "annotations.rtf") {
                   paste("{\\pard\\keep\\sb100\\sa50\\keepn\\fi0\\li0Det. Source:", 
                   as.character(herbdat$DET_SOURCE), "}")), 
                   paste("{\\pard\\keep\\sb150\\sa50\\keepn\\fi0\\li0\\tqr\\tx5045 Det.: ", 
-            herbdat$IDENTIFIED_BY, ", ", herbdat$INSTITUTION, "  \\tab ", 
-                 format(as.Date(herbdat$DATE_IDENTIFIED), 
-                format = "%d %b %Y"), " \\par }", sep = ""), "{\\pard\\sa400 \\par }")
+                         herbdat$IDENTIFIED_BY, "  ", herbdat$INSTITUTION, "  \\tab ", 
+                         tryCatch(formatdate(herbdat$DATE_IDENTIFIED), 
+                         error= function(e) {print("Warning: Date format incorrect, using original string"); herbdat$DATE_IDENTIFIED}), 
+                         " \\par }", sep = ""), 
+                "{\\pard\\sa400 \\par }")
         ### End of one label
         temp2 <- c(temp2, res)  ### Add label to the RTF file.
     }

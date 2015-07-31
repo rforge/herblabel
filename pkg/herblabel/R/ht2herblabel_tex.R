@@ -58,13 +58,14 @@ ht2herblabel_tex <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
         }
     
     #################### 
-    dirpgenus <- system.file("extdata", "plantlist_genera20141118.csv", package = "herblabel")
+    dirpgenus <- system.file("extdata", "APGIII_GENERA.csv", package = "herblabel")
     pgenus <- read.csv(dirpgenus, header = TRUE)
     
     Cap <- function(x) {
         paste(toupper(substring(x, 1, 1)), tolower(substring(x, 2)), sep = "")
     }
- 
+    formatdate <- function(x){format(as.Date(x),"%d %B %Y")}
+
     ### match.gf(herbdat000$FAMIL, herbdat000$GENUS)
 
     temp1 <- c("\\documentclass[a4paper,5pt,twocolumn]{article}",
@@ -113,7 +114,7 @@ ht2herblabel_tex <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
                 if(unique(as.character(Cap(fgmerge.temp$FAMILY.x))) %in% as.character(Cap(fgmerge.temp$FAMILY.y))){
                     herbdat$FAMILY <- paste("{\\color{red}{ ", unique(as.character(fgmerge.temp$FAMILY.x)), 
                                         "}} ", sep = "")
-                    herbdat$GENUS <- paste("{\\color{red}{ ", unique(as.character(fgmerge.temp$GENUS)), 
+                    herbdat$GENUS  <- paste("{\\color{red}{ ", unique(as.character(fgmerge.temp$GENUS)), 
                                        " (could also be in: ", 
                                        paste(as.character(Cap(fgmerge.temp$FAMILY.y))[!as.character(
                                             Cap(fgmerge.temp$FAMILY.y))%in%as.character(Cap(fgmerge.temp$FAMILY.x))], 
@@ -147,19 +148,19 @@ ht2herblabel_tex <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
         "\\large{",
         #### SPECIES INFO
         ifelse(is.na(herbdat$INFRASPECIFIC_RANK),
-              paste("\\textbf{\\textsl{",
-                    herbdat$GENUS,"}", 
-                    ifelse(is.na(herbdat$SPECIES)|herbdat$SPECIES == "sp.", " sp.", 
-                    paste(" \\textsl{", as.character(herbdat$SPECIES),"}")), "", 
-                    ifelse(is.na(herbdat$AUTHOR_OF_SPECIES),"", 
-                    as.character(herbdat$AUTHOR_OF_SPECIES)), 
-                    "}", sep = ""),
-              paste("\\textbf{\\textsl{",
-                    herbdat$GENUS,"} \\textsl{",herbdat$SPECIES,"} ",
-                    herbdat$AUTHOR_OF_SPECIES," ", herbdat$INFRASPECIFIC_RANK,
-                    " \\textsl{",herbdat$INFRASPECIFIC_EPITHET, "} ", 
-                    ifelse(is.na(herbdat$AUTHOR_OF_INFRASPECIFIC_RANK),"", 
-                    as.character(herbdat$AUTHOR_OF_INFRASPECIFIC_RANK)) ,"} ", sep = "")
+            paste("\\textbf{\\textsl{",
+                herbdat$GENUS,"}", 
+                ifelse(is.na(herbdat$SPECIES)|herbdat$SPECIES == "sp.", " sp.", 
+                paste(" \\textsl{", as.character(herbdat$SPECIES),"}")), "", 
+                ifelse(is.na(herbdat$AUTHOR_OF_SPECIES),"", 
+                as.character(herbdat$AUTHOR_OF_SPECIES)), 
+                "}", sep = ""),
+            paste("\\textbf{\\textsl{",
+                herbdat$GENUS,"} \\textsl{",herbdat$SPECIES,"} ",
+                herbdat$AUTHOR_OF_SPECIES," ", herbdat$INFRASPECIFIC_RANK,
+                " \\textsl{",herbdat$INFRASPECIFIC_EPITHET, "} ", 
+                ifelse(is.na(herbdat$AUTHOR_OF_INFRASPECIFIC_RANK),"", 
+                as.character(herbdat$AUTHOR_OF_INFRASPECIFIC_RANK)) ,"} ", sep = "")
                 ),
         "}\\\\", 
         "\\vspace{2mm }",        
@@ -177,24 +178,26 @@ ht2herblabel_tex <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
                herbdat$ELEVATION,"m \\\\",sep = "")),
         "\\vspace{1.5mm }",
         ##### Attributes and Remarks
-        paste(ifelse(is.na(herbdat$ATTRIBUTES),"", as.character(herbdat$ATTRIBUTES)), 
-              "  ", ifelse(is.na(herbdat$REMARKS),"", as.character(herbdat$REMARKS))," \\\\ ", sep = ""), 
-              "\\vspace{1mm}", 
+        ifelse( (is.na(herbdat$ATTRIBUTES) & is.na(herbdat$REMARKS)), "", 
+            paste(ifelse(is.na(herbdat$ATTRIBUTES),"", as.character(herbdat$ATTRIBUTES)), 
+            "  ", ifelse(is.na(herbdat$REMARKS),"", as.character(herbdat$REMARKS))," \\\\ ", sep = "")), 
+            "\\vspace{1mm}", 
         
         ##### COLLECTOR and COLLECTION NUMBER !
         ifelse(is.na(herbdat$ADDITIONAL_COLLECTOR), 
             paste("\\textbf{",
-                   herbdat$COLLECTOR,"} \\textbf{ $\\#$ " ,
-                   herbdat$COLLECTOR_NUMBER,"}\\hfill " ,
-                   format(as.Date(herbdat$DATE_COLLECTED), 
-                          format="%d %B %Y"),
-                   "\\\\",sep = ""), 
+                herbdat$COLLECTOR,"} \\textbf{ $\\#$ " ,
+                herbdat$COLLECTOR_NUMBER,"}\\hfill " ,
+                tryCatch(formatdate(herbdat$DATE_COLLECTED), 
+                error= function(e) {print("Warning: Date format incorrect, using original string"); 
+                herbdat$DATE_COLLECTED}), "\\\\",sep = ""), 
             paste("\\textbf{",
-                   herbdat$COLLECTOR,"}, \\textbf{",
-                   herbdat$ADDITIONAL_COLLECTOR,"} \\textbf{ $\\#$ " ,
-                   herbdat$COLLECTOR_NUMBER,"}\\hfill " ,
-                   format(as.Date(herbdat$DATE_COLLECTED), 
-                   format="%d %B %Y"),"\\\\",sep = "")
+                herbdat$COLLECTOR,"}, \\textbf{",
+                herbdat$ADDITIONAL_COLLECTOR,"} \\textbf{ $\\#$ " ,
+                herbdat$COLLECTOR_NUMBER,"}\\hfill " ,
+                tryCatch(formatdate(herbdat$DATE_COLLECTED), 
+                error= function(e) {print("Warning: Date format incorrect, using original string"); 
+                herbdat$DATE_COLLECTED}),"\\\\",sep = "")
             ), 
         ##### Project
         ifelse(is.na(herbdat$PROJECT), "", 
@@ -207,14 +210,16 @@ ht2herblabel_tex <- function(infile = NULL, spellcheck = TRUE, outfile = "herbla
             as.character(herbdat$GLOBAL_UNIQUE_IDENTIFIER))) ,
             " \\hfill ", herbdat$TYPE_STATUS,
                  "  Det.: ",herbdat$IDENTIFIED_BY,", ", 
-                 format(as.Date(herbdat$DATE_IDENTIFIED), 
-                 format="%d %B %Y"), "}\\\\",sep = ""),
+                 format(tryCatch(as.Date(herbdat$DATE_IDENTIFIED), 
+                                 error= function(e) {print("Date format incorrect, using original string");herbdat$DATE_IDENTIFIED}), 
+                        "%d %B %Y"), "}\\\\",sep = ""),
             paste("\\rightline{", gsub("_", "", 
                  ifelse(is.na(as.character(herbdat$GLOBAL_UNIQUE_IDENTIFIER)), "", 
                  as.character(herbdat$GLOBAL_UNIQUE_IDENTIFIER)))," \\hfill ", "Det.: ",
                  herbdat$IDENTIFIED_BY,", ", 
-                 format(as.Date(herbdat$DATE_IDENTIFIED), 
-                 format="%d %B %Y"), "}\\\\",sep = "")
+                 tryCatch(formatdate(herbdat$DATE_IDENTIFIED), 
+                    error= function(e) {print("Warning: Date format incorrect, using original string"); 
+                    herbdat$DATE_IDENTIFIED}), "}\\\\",sep = "")
             ),
         "\\vspace{3mm}",
         "\\end{tabular}\\\\"
