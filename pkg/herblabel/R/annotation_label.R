@@ -81,7 +81,7 @@ annotation_label <- function(dat = NULL, infile = NULL, spellcheck = TRUE, outfi
     
     ### match.gf(herbdat000$FAMIL, herbdat000$GENUS)
     temp1 <- c("{\\rtf1\\ansi\\deff0", 
-                "{\\fonttbl{\\f01\\froman\\fcharset01 Times New Roman;}}", 
+                "{\\fonttbl{\\f01\\froman\\fcharset01 Times New Roman; \\f02\\fmodern\\fcharset134 MingLiU;  \\f03\\fmodern\\fcharset134 SimSun; \\f04\\fmodern\\fcharset134 adobe-source-han-sans-otc-fonts;}}", 
                 "{\\colortbl;\\red0\\green0\\blue0;\\red0\\green0\\blue255;
                 \\red0\\green255\\blue255;\n \\red0\\green255\\blue0;
                 \\red255\\green0\\blue255;\\red255\\green0\\blue0;\n
@@ -99,14 +99,14 @@ annotation_label <- function(dat = NULL, infile = NULL, spellcheck = TRUE, outfi
         herbdat <- herbdat000[i, ]
         ### Set the size for each label
         res <- c(
-        ifelse((is.na(herbdat$COLLECTOR))|(is.na(herbdat$COLLECTOR_NUMBER)), "", paste("{\\pard\\keep\\keepn\\fi0\\li0\\brsp20\\sb100\\sa50\\fs16 COLL: ", herbdat$COLLECTOR, "  #",herbdat$COLLECTOR_NUMBER, "\\par }", sep = "")), 
+        ifelse((is.na(herbdat$COLLECTOR))|(is.na(herbdat$COLLECTOR_NUMBER)), "", paste("{\\pard\\keep\\keepn\\fi0\\li0\\brsp20\\sb100\\sa50 Coll.: ", herbdat$COLLECTOR, "  #",herbdat$COLLECTOR_NUMBER, "\\par }", sep = "")), 
         ifelse(is.na(herbdat$TYPE_STATUS), 
             "", 
             paste("{\\pard\\keep\\keepn\\fi0\\li0\\brsp20\\sb100\\sa50\\fs20\\b ", toupper(as.character(herbdat$TYPE_STATUS)), "\\b0  of:\\par }", sep = "")), 
         
         ifelse((is.na(herbdat$FAMILY)), 
             "", 
-            paste("{\\pard\\keep\\keepn\\fi0\\li0\\brsp20\\", ifelse((is.na(herbdat$TYPE_STATUS)), "sb20", "sb180"), "\\sa50\\fs20\\b ", toupper(as.character(herbdat$FAMILY)), "\\b0\\par }", sep = "")
+            paste("{\\pard\\keep\\keepn\\fi0\\li0\\brsp20\\", ifelse((is.na(herbdat$TYPE_STATUS)), "sb20", "sb180"), "\\sa50\\fs20\\b ", as.character(herbdat$FAMILY), "\\b0\\par }", sep = "")
             ),
         ifelse(((is.na(herbdat$GENUS)                        )& 
                 (is.na(herbdat$SPECIES)                      )& 
@@ -139,7 +139,17 @@ annotation_label <- function(dat = NULL, infile = NULL, spellcheck = TRUE, outfi
             ), 
         ifelse(is.na(herbdat$DET_NOTE), 
               "", 
-              paste("{\\pard\\keep\\sb10\\sa20\\keepn\\fi0\\li0\\fs16 ", as.character(herbdat$DET_NOTE), " \\par}", sep = "")
+              paste("{\\pard\\keep",
+                  ifelse(((is.na(herbdat$TYPE_STATUS                 ))&
+                                       (is.na(herbdat$TYPE_REF                    ))&
+                                       (is.na(herbdat$FAMILY                      ))&
+                                       (is.na(herbdat$GENUS                       ))&
+                                       (is.na(herbdat$SPECIES                     ))&
+                                       (is.na(herbdat$AUTHOR_OF_SPECIES           ))&
+                                       (is.na(herbdat$INFRASPECIFIC_RANK          ))&
+                                       (is.na(herbdat$INFRASPECIFIC_EPITHET       ))&
+                                       (is.na(herbdat$AUTHOR_OF_INFRASPECIFIC_RANK))), "\\sb150", "\\sb10")
+                          ,"\\sa20\\keepn\\fi0\\li0\\fs16 ", as.character(herbdat$DET_NOTE), " \\par}", sep = "")
             ), 
         paste("{\\pard\\keep", ifelse(((is.na(herbdat$TYPE_STATUS                 ))&
                                        (is.na(herbdat$TYPE_REF                    ))&
@@ -156,7 +166,10 @@ annotation_label <- function(dat = NULL, infile = NULL, spellcheck = TRUE, outfi
              ifelse((is.na(herbdat$PROJECT)), 
                    "\\sa150",
                    "\\sa10"), 
-             "\\keepn\\fi0\\li0\\tqr\\tx4850 Det.: ", 
+             "\\keepn\\fi0\\li0\\tqr\\tx4850 ", 
+                  ifelse(is.na(herbdat$ABBREVIATION), 
+                         "", 
+                         paste(herbdat$ABBREVIATION,": ", sep = "")), 
                   ifelse(is.na(herbdat$IDENTIFIED_BY), 
                          "", 
                          as.character(herbdat$IDENTIFIED_BY)), 
@@ -185,7 +198,14 @@ annotation_label <- function(dat = NULL, infile = NULL, spellcheck = TRUE, outfi
     }
     template <- c(temp1, temp2, "}")  ## End of the RTF file
     res <- template[!template %in% ""]
-    writeLines(res, outfile)
+    
+    syst <- Sys.info()[['sysname']]
+    if(syst == "Windows"){
+        writeLines(res, outfile)
+    } else {
+        res <- iconv(x = res, from = "UTF-8", to = "GB18030")
+        writeLines(res, outfile)
+    }
     ### Notice
     cat("Annotation labels have been saved to:\n", 
         file.path(getwd(), outfile), "\n", sep = "")

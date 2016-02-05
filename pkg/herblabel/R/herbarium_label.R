@@ -63,8 +63,9 @@ herbarium_label <- function(dat = NULL, infile = NULL, spellcheck = TRUE, outfil
     "DATE_LASTMODIFIED")
     
     ### Check if the standardized template is used. 
-    if(!all(colnames(herbdat000) %in% colnames_template)){
-       warning(paste("The following Columns are needed ", paste(colnames(herbdat000)[!colnames(herbdat000) %in% colnames_template], collapse = ", ")))
+    if(!all(colnames_template %in% colnames(herbdat000) )){
+       warning(paste("The following Columns are needed ", 
+               paste(colnames_template [! colnames_template %in% colnames(herbdat000) ], collapse = ", ")))
     }
     
     herbdat000[herbdat000 == ""] <- NA
@@ -101,7 +102,7 @@ herbarium_label <- function(dat = NULL, infile = NULL, spellcheck = TRUE, outfil
              paste(which(is.na(herbdat000$COUNTRY)) + 1, collapse = ", ")))
          }
     if(any(is.na(herbdat000$STATE_PROVINCE))){
-        stop(paste("\"STATE_PROVINCE\" not provided for row: ", 
+        warning(paste("\"STATE_PROVINCE\" not provided for row: ", 
              paste(which(is.na(herbdat000$STATE_PROVINCE)) + 1, collapse = ", ")))
         }
     if(any(is.na(herbdat000$COUNTY))){
@@ -162,10 +163,11 @@ herbarium_label <- function(dat = NULL, infile = NULL, spellcheck = TRUE, outfil
         return(res)
     }
     
+    
+    dirlatin <- system.file("extdata", "latin_source.txt", package = "herblabel")
+    latin_source <- readLines(dirlatin)
     #### Change the Scientific names in the Remarks section into Italic. 
-    italic_latin <- function(x, latin_source) {
-        dirlatin <- system.file("extdata", "latin_source.txt", package = "herblabel")
-        latin_source <- readLines(dirlatin)
+    italic_latin <- function(x) {
         res.split <- unlist(strsplit(x, split = " "))
         res.split2 <- tolower(gsub(",|\\.", "", res.split))
         found <- res.split2 %in% latin_source
@@ -268,7 +270,10 @@ herbarium_label <- function(dat = NULL, infile = NULL, spellcheck = TRUE, outfil
    lon_check_ind_2 <- rep(FALSE, nrow(herbdat000))
    lon_check_ind_3 <- rep(FALSE, nrow(herbdat000))
    
-   for(i in 1:nrow(herbdat000)){  
+   herbdat000$LAT_FLAG <- toupper(herbdat000$LAT_FLAG)
+   herbdat000$LON_FLAG <- toupper(herbdat000$LON_FLAG)
+   for(i in 1:nrow(herbdat000)){
+        
         herbdat_temp <- herbdat000[i, ]
         #### Check the Lat Flag
         if(any(!is.na(herbdat_temp$LAT_DEGREE), !is.na(herbdat_temp$LAT_MINUTE), !is.na(herbdat_temp$LAT_SECOND)) & is.na(herbdat_temp$LAT_FLAG)){
@@ -318,7 +323,7 @@ herbarium_label <- function(dat = NULL, infile = NULL, spellcheck = TRUE, outfil
     
    ###########################################################################################################
     temp1 <- c("{\\rtf1\\ansi\\deff0", #### Staring a RTF 
-               "{\\fonttbl{\\f01\\froman\\fcharset01 Times New Roman;}}",    
+               "{\\fonttbl{\\f01\\froman\\fcharset01 Times New Roman; \\f02\\fmodern\\fcharset134 MingLiU; \\f03\\fmodern\\fcharset134 SimSun; \\f04\\fmodern\\fcharset134 adobe-source-han-sans-otc-fonts; }}",    
                "{\\colortbl;\\red0\\green0\\blue0;\\red0\\green0\\blue255;\\red0\\green255\\blue255;
                \\red0\\green255\\blue0;\\red255\\green0\\blue255;\\red255\\green0\\blue0;
                \\red255\\green255\\blue0;\\red255\\green255\\blue255;\\red0\\green0\\blue128;
@@ -490,7 +495,13 @@ herbarium_label <- function(dat = NULL, infile = NULL, spellcheck = TRUE, outfil
     res <- replace_space(res)          ### replace the space at the beginning or ending. 
     ###### replace multiple commas or space from the string
     ### Create the RTF file
-    writeLines(res, outfile)
+    syst <- Sys.info()[['sysname']]
+    if(syst == "Windows"){
+        writeLines(res, outfile)
+    } else {
+        res <- iconv(x = res, from = "UTF-8", to = "GB18030")
+        writeLines(res, outfile)
+    }
     ### Notice
     cat("Herbarium Labels have been saved to:\n", 
          file.path(getwd(), outfile),"\n", sep = "")
