@@ -23,11 +23,11 @@ A dataframe containing the following columns TAXON_PARSED, GENUS_PARSED, SPECIES
 }
 
 \author{
-Jinlong Zhang
+Jinlong Zhang \email{ jinlongzhang01@gmail.com }
 }
 
 \seealso{
-See Also as \code{\link{fill_sp_dwc}} for the application of this function.
+See Also as \code{\link{fill_dwc}} for the application of this function.
 } 
 \examples{
 

@@ -7,15 +7,12 @@
     Making RTF Annotation labels based on annotation template
 }
 \usage{
-    annotation_label(dat = NULL, infile = NULL, spellcheck = TRUE, outfile = "Annotation_Labels.rtf")
+    annotation_label(dat = NULL, spellcheck = TRUE, outfile = "Annotation_Labels.rtf")
 }
 
 \arguments{
   \item{dat}{
 data frame of Annotation Template.  
-}
-  \item{infile}{
-Character string, the name of the csv template.
 }
   \item{spellcheck}{
 Logical, whether the spell checking for species should be porformed. 
@@ -67,14 +64,15 @@ annotation labels.
 }
 
 \author{
-Jinlong Zhang 
+Jinlong Zhang \email{ jinlongzhang01@gmail.com }
 }
 
 \examples{
 
-   path <- system.file("extdata", "ANNOTATION_TEMPLATE.csv", 
+    path <- system.file("extdata", "ANNOTATION_TEMPLATE.xlsx", 
                        package = "herblabel")
-                       
-   annotation_label(infile = path)
+    library(openxlsx)
+    dat <- read.xlsx(path)                    
+    annotation_label(dat)
    
 }
