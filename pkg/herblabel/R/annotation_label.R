@@ -28,10 +28,7 @@ annotation_label <- function(dat = NULL, spellcheck = TRUE, outfile = "Annotatio
         format(as.Date(x),"%d %B %Y")
     }
     
-    #################### 
-    dirpgenus <- system.file("extdata", "APGIII_GENERA.csv", package = "herblabel")
-    pgenus    <- read.csv(dirpgenus, header = TRUE, stringsAsFactors = FALSE, na.strings = "NA")
-    
+    pgenus <- herblabel::pgenus
     #### replace multiple commas and white space, and delete comma if it is the last one.
     REPLACE <- function(x){
         if(length(x) > 1){
@@ -52,20 +49,18 @@ annotation_label <- function(dat = NULL, spellcheck = TRUE, outfile = "Annotatio
     }
     
     if(spellcheck){
-        sptemp <- paste( ifelse(is.na(herbdat000$GENUS),                                                 "",  herbdat000$GENUS                       ),
-                         ifelse(is.na(herbdat000$SPECIES),                                             "",  herbdat000$SPECIES                     ),
-                         ifelse(is.na(herbdat000$AUTHOR_OF_SPECIES),                         "",  herbdat000$AUTHOR_OF_SPECIES           ),
-                         ifelse(is.na(herbdat000$INFRASPECIFIC_RANK),                     "",  herbdat000$INFRASPECIFIC_RANK          ),
-                         ifelse(is.na(herbdat000$INFRASPECIFIC_EPITHET),               "",  herbdat000$INFRASPECIFIC_EPITHET       ),
+        sptemp <- paste( ifelse(is.na(herbdat000$GENUS),                        "",  herbdat000$GENUS                       ),
+                         ifelse(is.na(herbdat000$SPECIES),                      "",  herbdat000$SPECIES                     ),
+                         ifelse(is.na(herbdat000$AUTHOR_OF_SPECIES),            "",  herbdat000$AUTHOR_OF_SPECIES           ),
+                         ifelse(is.na(herbdat000$INFRASPECIFIC_RANK),           "",  herbdat000$INFRASPECIFIC_RANK          ),
+                         ifelse(is.na(herbdat000$INFRASPECIFIC_EPITHET),        "",  herbdat000$INFRASPECIFIC_EPITHET       ),
                          ifelse(is.na(herbdat000$AUTHOR_OF_INFRASPECIFIC_RANK), "",  herbdat000$AUTHOR_OF_INFRASPECIFIC_RANK), 
                          sep = " ")
         sptemp2 <- c()
         for(i in 1:length(sptemp)){
             sptemp2[i] <- REPLACE(sptemp[i])   
         }
-        tplsplistdir <- system.file("extdata", "tplsplist.txt", 
-                                   package = "herblabel")
-        tplsplist <- readLines(tplsplistdir)
+        tplsplist <- herblabel::tplsplist
         ind <- (!sptemp2 %in% tplsplist) & (!gsub(" ", "", sptemp2 ) == "")  ### Make sure the empty entries were excluded. 
         herbdat000$GENUS[ind] <- paste("\\cf2\\i0 Name not found. Check Spelling at {\\field{\\*\\fldinst{HYPERLINK \"http://www.theplantlist.org/\"}}{\\fldrslt{\\ul\\cf2 http://www.theplantlist.org/}}} or {\\field{\\*\\fldinst{HYPERLINK \"http://frps.eflora.cn/\"}}{\\fldrslt{\\ul\\cf2 http://frps.eflora.cn/}}} for:\\i  ", herbdat000$GENUS[ind], sep = "")
         herbdat000$AUTHOR_OF_INFRASPECIFIC_RANK[ind] <- paste(ifelse(is.na(herbdat000$AUTHOR_OF_INFRASPECIFIC_RANK[ind]), "", herbdat000$AUTHOR_OF_INFRASPECIFIC_RANK[ind]), "\\cf1", sep = "")
@@ -82,7 +77,9 @@ annotation_label <- function(dat = NULL, spellcheck = TRUE, outfile = "Annotatio
         herbdat <- herbdat000[i, ]
         ### Set the size for each label
         res <- c(
-        ifelse((is.na(herbdat$COLLECTOR))|(is.na(herbdat$COLLECTOR_NUMBER)), "", paste("{\\pard\\keep\\keepn\\fi0\\li0\\brsp20\\fs18\\sb100\\sa50 Coll.: ", herbdat$COLLECTOR, "  #",herbdat$COLLECTOR_NUMBER, "\\par }", sep = "")), 
+        ifelse((is.na(herbdat$COLLECTOR))|(is.na(herbdat$COLLECTOR_NUMBER)), 
+                "", 
+                paste("{\\pard\\keep\\keepn\\fi0\\li0\\brsp20\\fs18\\sb100\\sa50 Coll.: ", herbdat$COLLECTOR, "  #",herbdat$COLLECTOR_NUMBER, "\\par }", sep = "")), 
         ifelse(is.na(herbdat$TYPE_STATUS), 
             "", 
             paste("{\\pard\\keep\\keepn\\fi0\\li0\\brsp20\\sb100\\sa50\\fs20\\b ", toupper(as.character(herbdat$TYPE_STATUS)), "\\b0  of:\\par }", sep = "")), 
@@ -104,15 +101,15 @@ annotation_label <- function(dat = NULL, spellcheck = TRUE, outfile = "Annotatio
                 "\\sa20\\fs20\\b\\i ", 
                 ifelse(is.na(herbdat$GENUS),                          "",      as.character(herbdat$GENUS)), 
                       "\\i0  \\i ", 
-                ifelse((is.na(herbdat$SPECIES)),                    "\\i0 ", as.character(herbdat$SPECIES)), 
+                ifelse((is.na(herbdat$SPECIES)),                      "\\i0 ", as.character(herbdat$SPECIES)), 
                       "\\i0  ", 
-                ifelse(is.na(herbdat$AUTHOR_OF_SPECIES),  "",      as.character(herbdat$AUTHOR_OF_SPECIES)), 
+                ifelse(is.na(herbdat$AUTHOR_OF_SPECIES),              "",      as.character(herbdat$AUTHOR_OF_SPECIES)), 
                   " ", 
-                ifelse(is.na(herbdat$INFRASPECIFIC_RANK),                                 "",      as.character(herbdat$INFRASPECIFIC_RANK)), 
+                ifelse(is.na(herbdat$INFRASPECIFIC_RANK),             "",      as.character(herbdat$INFRASPECIFIC_RANK)), 
                 " \\i ", 
-                ifelse(is.na(herbdat$INFRASPECIFIC_EPITHET),                              "",      as.character(herbdat$INFRASPECIFIC_EPITHET)), 
+                ifelse(is.na(herbdat$INFRASPECIFIC_EPITHET),          "",      as.character(herbdat$INFRASPECIFIC_EPITHET)), 
                 "\\i0  ", 
-                ifelse(is.na(herbdat$AUTHOR_OF_INFRASPECIFIC_RANK),                       "",      as.character(herbdat$AUTHOR_OF_INFRASPECIFIC_RANK)
+                ifelse(is.na(herbdat$AUTHOR_OF_INFRASPECIFIC_RANK),   "",      as.character(herbdat$AUTHOR_OF_INFRASPECIFIC_RANK)
                 ), 
                 "\\b0\\par }", sep = "")
             ), 
@@ -123,7 +120,7 @@ annotation_label <- function(dat = NULL, spellcheck = TRUE, outfile = "Annotatio
         ifelse(is.na(herbdat$DET_NOTE), 
               "", 
               paste("{\\pard\\keep",
-                  ifelse(((is.na(herbdat$TYPE_STATUS                 ))&
+                  ifelse(((is.na(herbdat$TYPE_STATUS                              ))&
                                        (is.na(herbdat$TYPE_REF                    ))&
                                        (is.na(herbdat$FAMILY                      ))&
                                        (is.na(herbdat$GENUS                       ))&
@@ -132,7 +129,7 @@ annotation_label <- function(dat = NULL, spellcheck = TRUE, outfile = "Annotatio
                                        (is.na(herbdat$INFRASPECIFIC_RANK          ))&
                                        (is.na(herbdat$INFRASPECIFIC_EPITHET       ))&
                                        (is.na(herbdat$AUTHOR_OF_INFRASPECIFIC_RANK))), "\\sb150", "\\sb10")
-                          ,"\\sa20\\keepn\\fi0\\li0\\fs16 ", as.character(herbdat$DET_NOTE), " \\par}", sep = "")
+                                      ,"\\sa20\\keepn\\fi0\\li0\\fs16 ", as.character(herbdat$DET_NOTE), " \\par}", sep = "")
             ), 
         paste("{\\pard\\keep", ifelse(((is.na(herbdat$TYPE_STATUS                 ))&
                                        (is.na(herbdat$TYPE_REF                    ))&
@@ -144,7 +141,7 @@ annotation_label <- function(dat = NULL, spellcheck = TRUE, outfile = "Annotatio
                                        (is.na(herbdat$INFRASPECIFIC_EPITHET       ))&
                                        (is.na(herbdat$AUTHOR_OF_INFRASPECIFIC_RANK))&
                                        (is.na(herbdat$DET_NOTE                    ))),
-                                       "\\sb800",
+                                       "\\sb800", # if all are missing, extent the space
                                        "\\sb200"), 
              ifelse((is.na(herbdat$PROJECT)), 
                    "\\sa150",
@@ -159,12 +156,14 @@ annotation_label <- function(dat = NULL, spellcheck = TRUE, outfile = "Annotatio
                   "", 
                   ifelse(is.na(herbdat$INSTITUTION), 
                          "", 
-                         paste(", ", as.character(herbdat$INSTITUTION), sep = "")), 
+                         ifelse(is.na(herbdat$IDENTIFIED_BY), 
+                               paste("                         ", as.character(herbdat$INSTITUTION), sep = ""),
+                               paste(", ", as.character(herbdat$INSTITUTION), sep = ""))), 
                   "  \\tab ", 
                   ifelse(is.na(herbdat$DATE_IDENTIFIED), 
                          "", 
                          tryCatch(formatdate(herbdat$DATE_IDENTIFIED), 
-                         error= function(e) {print("Warning: Date format incorrect, using original string"); 
+                                  error= function(e) {print("Warning: Date format incorrect, using original string"); 
                                              herbdat$DATE_IDENTIFIED})
                          ), 
                          " \\par }", sep = ""
